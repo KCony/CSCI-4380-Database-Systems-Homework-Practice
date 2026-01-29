@@ -1,0 +1,339 @@
+\documentclass[11pt]{article}
+\usepackage{enumerate}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{upquote,textcomp}
+\usepackage{xcolor}
+\usepackage[thicklines]{cancel}
+\usepackage{amsmath}
+
+\setlength{\parindent}{0cm}
+
+\setlength{\parskip}{0.3cm plus4mm minus3mm}
+
+\oddsidemargin = 0.2in
+\textwidth = 6.5 in
+\textheight = 9.8 in
+\headsep = -1in
+
+\lstset{frame=tb,
+  language=,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  keepspaces=true,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{black},
+  keywordstyle=\color{black},
+  commentstyle=\color{black},
+  stringstyle=\color{black},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\title{Database Systems, CSCI 4380-01 \\
+Homework \# 1 Practice Problem for Question 3 Version 1.02}
+\date{}
+\begin{document}
+\maketitle
+
+\vspace*{-0.7in}
+
+{\bf Question 3 [30 points].}
+For the following relations, find and list all the keys.
+
+\begin{enumerate}
+\item $R1(A,B,C,D,E,F,G)$, ${\cal F} = \{AB\rightarrow CD, DEF\rightarrow ACG, G\rightarrow BD, D \rightarrow E \}$
+\end{enumerate}
+
+{\bf Solution.}
+\renewcommand{\CancelColor}{\color{red}}
+\begin{enumerate}
+\item Relation $R$ has seven attributes. The total number of subsets of attributes would be $2^7 - 1 = 127$ (excluding the empty set). In principle, we have to consider each from these subsets but hopefully we can take some shortcuts, so that we don't have to test every single one of them. Let's start with the full list of subsets though:
+
+
+\begin{tabular}{ccccccc}
+A & AB & ABC & ABCD & ABCDE & ABCDEF & ABCDEFG \\
+B & AC & ABD & ABCE & ABCDF & ABCDEG & \\
+C & AD & ABE & ABCF & ABCDG & ABCDFG & \\
+D & AE & ABF & ABCG & ABCEF & ABCEFG & \\
+E & AF & ABG & ABDE & ABCEG & ABDEFG & \\
+F & AG & ACD & ABDF & ABCFG & ACDEFG & \\
+G & BC & ACE & ABDG & ABDEF & BCDEFG & \\
+  & BD & ACF & ABEF & ABDEG & & \\
+  & BE & ACG & ABEG & ABDFG & & \\
+  & BF & ADE & ABFG & ABEFG & & \\
+  & BG & ADF & ACDE & ACDEF & & \\
+  & CD & ADG & ACDF & ACDEG & & \\
+  & CE & AEF & ACDG & ACDFG & & \\
+  & CF & AEG & ACEF & ACEFG & & \\
+  & CG & AFG & ACEG & ADEFG & & \\
+  & DE & BCD & ACFG & BCDEF & & \\
+  & DF & BCE & ADEF & BCDEG & & \\
+  & DG & BCF & ADEG & BCDFG & & \\
+  & EF & BCG & ADFG & BCEFG & & \\
+  & EG & BDE & AEFG & BDEFG & & \\
+  & FG & BDF & BCDE & CDEFG & & \\
+  &    & BDG & BCDF & & & \\
+  &    & BEF & BCDG & & & \\
+  &    & BEG & BCEF & & & \\
+  &    & BFG & BCEG & & & \\
+  &    & CDE & BCFG & & & \\
+  &    & CDF & BDEF & & & \\
+  &    & CDG & BDEG & & & \\
+  &    & CEF & BDFG & & & \\
+  &    & CEG & BEFG & & & \\
+  &    & CFG & CDEF & & & \\
+  &    & DEF & CDEG & & & \\
+  &    & DEG & CDFG & & & \\
+  &    & DFG & CEFG & & & \\
+  &    & EFG & DEFG & & & \\
+\end{tabular}
+
+Now, looking at the functional dependencies, we see that none of them have attribute $F$ on the right-hand side. It means that this attribute will be included in every key. Therefore, attribute sets without this attribute cannot be keys and can be crossed out:
+
+\begin{tabular}{ccccccc}
+\cancel{A} & \cancel{AB} & \cancel{ABC} & \cancel{ABCD} & \cancel{ABCDE} & ABCDEF & ABCDEFG \\
+\cancel{B} & \cancel{AC} & \cancel{ABD} & \cancel{ABCE} & ABCDF & \cancel{ABCDEG} & \\
+\cancel{C} & \cancel{AD} & \cancel{ABE} & ABCF & \cancel{ABCDG} & ABCDFG & \\
+\cancel{D} & \cancel{AE} & ABF & \cancel{ABCG} & ABCEF & ABCEFG & \\
+\cancel{E} & AF & \cancel{ABG} & \cancel{ABDE} & \cancel{ABCEG} & ABDEFG & \\
+F & \cancel{AG} & \cancel{ACD} & ABDF & ABCFG & ACDEFG & \\
+\cancel{G} & \cancel{BC} & \cancel{ACE} & \cancel{ABDG} & ABDEF & BCDEFG & \\
+  & \cancel{BD} & ACF & ABEF & \cancel{ABDEG} & & \\
+  & \cancel{BE} & \cancel{ACG} & \cancel{ABEG} & ABDFG & & \\
+  & BF & \cancel{ADE} & ABFG & ABEFG & & \\
+  & \cancel{BG} & ADF & \cancel{ACDE} & ACDEF & & \\
+  & \cancel{CD} & \cancel{ADG} & ACDF & \cancel{ACDEG} & & \\
+  & \cancel{CE} & AEF & \cancel{ACDG} & ACDFG & & \\
+  & CF & \cancel{AEG} & ACEF & ACEFG & & \\
+  & \cancel{CG} & AFG & \cancel{ACEG} & ADEFG & & \\
+  & \cancel{DE} & \cancel{BCD} & ACFG & BCDEF & & \\
+  & DF & \cancel{BCE} & ADEF & \cancel{BCDEG} & & \\
+  & \cancel{DG} & BCF & \cancel{ADEG} & BCDFG & & \\
+  & EF & \cancel{BCG} & ADFG & BCEFG & & \\
+  & \cancel{EG} & \cancel{BDE} & AEFG & BDEFG & & \\
+  & FG & BDF & \cancel{BCDE} & CDEFG & & \\
+  &    & \cancel{BDG} & BCDF & & & \\
+  &    & BEF & \cancel{BCDG} & & & \\
+  &    & \cancel{BEG} & BCEF & & & \\
+  &    & BFG & \cancel{BCEG} & & & \\
+  &    & \cancel{CDE} & BCFG & & & \\
+  &    & CDF & BDEF & & & \\
+  &    & \cancel{CDG} & \cancel{BDEG} & & & \\
+  &    & CEF & BDFG & & & \\
+  &    & \cancel{CEG} & BEFG & & & \\
+  &    & CFG & CDEF & & & \\
+  &    & DEF & \cancel{CDEG} & & & \\
+  &    & \cancel{DEG} & CDFG & & & \\
+  &    & DFG & CEFG & & & \\
+  &    & EFG & DEFG & & & \\
+\end{tabular}
+
+Now, we only have 64 sets to test. Much easier than 127! Then let's pick a set and check if it is a key. For example, we consider $ACEF$:
+$\{ A, C, E, F \}^+ = \{ A, C, E, F \}\}$
+
+It is not a key, so we can cross it out. More importantly, we can make an observation that any set of attributes that does not contain all the attributes from at least one of the following sets $\{ A, B \}$, $\{ D, E, F \}$, $\{ G \}$, and $\{ D \}$ would not be a key. It is due to the fact that we would not be able to apply any of the functional dependencies to add more attributes to the closure of such a set of attributes.
+
+\begin{tabular}{ccccccc}
+\cancel{A} & \cancel{AB} & \cancel{ABC} & \cancel{ABCD} & \cancel{ABCDE} & ABCDEF & ABCDEFG \\
+\cancel{B} & \cancel{AC} & \cancel{ABD} & \cancel{ABCE} & ABCDF & \cancel{ABCDEG} & \\
+\cancel{C} & \cancel{AD} & \cancel{ABE} & ABCF & \cancel{ABCDG} & ABCDFG & \\
+\cancel{D} & \cancel{AE} & ABF & \cancel{ABCG} & ABCEF & ABCEFG & \\
+\cancel{E} & \cancel{AF} & \cancel{ABG} & \cancel{ABDE} & \cancel{ABCEG} & ABDEFG & \\
+\cancel{F} & \cancel{AG} & \cancel{ACD} & ABDF & ABCFG & ACDEFG & \\
+\cancel{G} & \cancel{BC} & \cancel{ACE} & \cancel{ABDG} & ABDEF & BCDEFG & \\
+  & \cancel{BD} & \cancel{ACF} & ABEF & \cancel{ABDEG} & & \\
+  & \cancel{BE} & \cancel{ACG} & \cancel{ABEG} & ABDFG & & \\
+  & \cancel{BF} & \cancel{ADE} & ABFG & ABEFG & & \\
+  & \cancel{BG} & ADF & \cancel{ACDE} & ACDEF & & \\
+  & \cancel{CD} & \cancel{ADG} & ACDF & \cancel{ACDEG} & & \\
+  & \cancel{CE} & \cancel{AEF} & \cancel{ACDG} & ACDFG & & \\
+  & \cancel{CF} & \cancel{AEG} & \cancel{ACEF} & ACEFG & & \\
+  & \cancel{CG} & AFG & \cancel{ACEG} & ADEFG & & \\
+  & \cancel{DE} & \cancel{BCD} & ACFG & BCDEF & & \\
+  & DF & \cancel{BCE} & ADEF & \cancel{BCDEG} & & \\
+  & \cancel{DG} & \cancel{BCF} & \cancel{ADEG} & BCDFG & & \\
+  & \cancel{EF} & \cancel{BCG} & ADFG & BCEFG & & \\
+  & \cancel{EG} & \cancel{BDE} & AEFG & BDEFG & & \\
+  & FG & BDF & \cancel{BCDE} & CDEFG & & \\
+  &    & \cancel{BDG} & BCDF & & & \\
+  &    & \cancel{BEF} & \cancel{BCDG} & & & \\
+  &    & \cancel{BEG} & \cancel{BCEF} & & & \\
+  &    & BFG & \cancel{BCEG} & & & \\
+  &    & \cancel{CDE} & BCFG & & & \\
+  &    & CDF & BDEF & & & \\
+  &    & \cancel{CDG} & \cancel{BDEG} & & & \\
+  &    & \cancel{CEF} & BDFG & & & \\
+  &    & \cancel{CEG} & BEFG & & & \\
+  &    & CFG & CDEF & & & \\
+  &    & DEF & \cancel{CDEG} & & & \\
+  &    & \cancel{DEG} & CDFG & & & \\
+  &    & DFG & CEFG & & & \\
+  &    & EFG & DEFG & & & \\
+\end{tabular}
+
+We are down to just 52 sets to test. Let's pick a set $ABCDF$:\\
+$\{ A, B, C, D, F \}^+ = \{ A, B, C, D, F \}\, \cup\, \{ E \}\, (\text{after using } D \rightarrow E)\, \cup\, \\
+\{ A, C, G \}\, (\text{after using } DEF \rightarrow ACG) =  \{ A, B, C, D, E, F, G \}$. So, we found at least a superkey. But we don't know whether it is minimal or not. Let's list all of the subsets of $\{ A, B, C, D, F \}$ that have not been crossed out:
+\begin{itemize}
+\item $\{ D, F \}$
+\item $\{ A, B, F \}$
+\item $\{ A, D, F \}$
+\item $\{ B, D, F \}$
+\item $\{ C, D, F \}$
+\item $\{ A, B, C, F \}$
+\item $\{ A, B, D, F \}$
+\item $\{ A, C, D, F \}$
+\item $\{ B, C, D, F \}$
+\item $\{ A, B, C, D, F \}$
+\end{itemize}
+
+Let's compute the closure of $\{ A, B, F \}$:\\
+$\{ A, B, F \}^+ = \{ A, B, F \}\, \cup\, \{ C, D \}\, (\text{after using } AB \rightarrow CD)\, \cup\, \\
+\{ E \}\, (\text{after using } D \rightarrow E)\, \cup\, \{ A, C, G \}\, (\text{after using } DEF \rightarrow ACG) =  \{ A, B, C, D, E, F, G \}$. We conclude that $\{ A, B, C, D, F \}$ was not a key since it was not minimal. $\{ A, B, F \}$ is a superkey. Is it a key? Yes, because all proper subsets of $\{ A, B, F \}$ would contain at most two elements and would also be subsets of $\{ A, B, C, D, F \}$. However, there are no single-element subsets of $\{ A, B, C, D, F \}$ listed above. The only two-element subset of $\{ A, B, C, D, F \}$ listed above is $\{ D, F \}$ which is not a subset of $\{ A, B, F \}$. It means that $\{ A, B, F \}$ is a key. Since we found a key, let's mark it and cross out all of its superkeys:
+
+\begin{tabular}{ccccccc}
+\cancel{A} & \cancel{AB} & \cancel{ABC} & \cancel{ABCD} & \cancel{ABCDE} & \cancel{ABCDEF} & \cancel{ABCDEFG} \\
+\cancel{B} & \cancel{AC} & \cancel{ABD} & \cancel{ABCE} & \cancel{ABCDF} & \cancel{ABCDEG} & \\
+\cancel{C} & \cancel{AD} & \cancel{ABE} & \cancel{ABCF} & \cancel{ABCDG} & \cancel{ABCDFG} & \\
+\cancel{D} & \cancel{AE} & \colorbox{green}{ABF} & \cancel{ABCG} & \cancel{ABCEF} & \cancel{ABCEFG} & \\
+\cancel{E} & \cancel{AF} & \cancel{ABG} & \cancel{ABDE} & \cancel{ABCEG} & \cancel{ABDEFG} & \\
+\cancel{F} & \cancel{AG} & \cancel{ACD} & \cancel{ABDF} & \cancel{ABCFG} & ACDEFG & \\
+\cancel{G} & \cancel{BC} & \cancel{ACE} & \cancel{ABDG} & \cancel{ABDEF} & BCDEFG & \\
+  & \cancel{BD} & \cancel{ACF} & \cancel{ABEF} & \cancel{ABDEG} & & \\
+  & \cancel{BE} & \cancel{ACG} & \cancel{ABEG} & \cancel{ABDFG} & & \\
+  & \cancel{BF} & \cancel{ADE} & \cancel{ABFG} & \cancel{ABEFG} & & \\
+  & \cancel{BG} & ADF & \cancel{ACDE} & ACDEF & & \\
+  & \cancel{CD} & \cancel{ADG} & ACDF & \cancel{ACDEG} & & \\
+  & \cancel{CE} & \cancel{AEF} & \cancel{ACDG} & ACDFG & & \\
+  & \cancel{CF} & \cancel{AEG} & \cancel{ACEF} & ACEFG & & \\
+  & \cancel{CG} & AFG & \cancel{ACEG} & ADEFG & & \\
+  & \cancel{DE} & \cancel{BCD} & ACFG & BCDEF & & \\
+  & DF & \cancel{BCE} & ADEF & \cancel{BCDEG} & & \\
+  & \cancel{DG} & \cancel{BCF} & \cancel{ADEG} & BCDFG & & \\
+  & \cancel{EF} & \cancel{BCG} & ADFG & BCEFG & & \\
+  & \cancel{EG} & \cancel{BDE} & AEFG & BDEFG & & \\
+  & FG & BDF & \cancel{BCDE} & CDEFG & & \\
+  &    & \cancel{BDG} & BCDF & & & \\
+  &    & \cancel{BEF} & \cancel{BCDG} & & & \\
+  &    & \cancel{BEG} & \cancel{BCEF} & & & \\
+  &    & BFG & \cancel{BCEG} & & & \\
+  &    & \cancel{CDE} & BCFG & & & \\
+  &    & CDF & BDEF & & & \\
+  &    & \cancel{CDG} & \cancel{BDEG} & & & \\
+  &    & \cancel{CEF} & BDFG & & & \\
+  &    & \cancel{CEG} & BEFG & & & \\
+  &    & CFG & CDEF & & & \\
+  &    & DEF & \cancel{CDEG} & & & \\
+  &    & \cancel{DEG} & CDFG & & & \\
+  &    & DFG & CEFG & & & \\
+  &    & EFG & DEFG & & & \\
+\end{tabular}
+
+We have 36 sets left to test. Let's pick a set $AFG$:\\
+$\{ A, F, G \}^+ = \{ A, F, G \}\, \cup\, \{ B, D \}\, (\text{after using } G \rightarrow BD)\, \cup\, \\
+\{ E \}\, (\text{after using } D \rightarrow E)\, \cup\, \{ A, C, G \}\, (\text{after using } DEF \rightarrow ACG) =  \{ A, B, C, D, E, F, G \}$. So, we found at least a superkey. But we don't know whether it is minimal or not. Let's list all of the subsets of $\{ A, F, G \}$ that have not been crossed out:
+\begin{itemize}
+\item $\{ F, G \}$
+\item $\{ A, F, G \}$
+\end{itemize}
+
+Let's compute the closure of $\{ F, G \}$:\\
+$\{ F, G \}^+ = \{ F, G \}\, \cup\, \{ B, D \}\, (\text{after using } G \rightarrow BD)\, \cup\, \\
+\{ E \}\, (\text{after using } D \rightarrow E)\, \cup\, \{ A, C, G \}\, (\text{after using } DEF \rightarrow ACG) = \{ A, B, C, D, E, F, G \}$. We conclude that $\{ A, F, G \}$ was not a key since it was not minimal. $\{ F, G \}$ is a key since its closure contains all attributes, and none of the proper subsets of $\{ F, G \}$ remains uncrossed in our list. Since we found a key, let's mark it and cross out all of its superkeys:
+
+\begin{tabular}{ccccccc}
+\cancel{A} & \cancel{AB} & \cancel{ABC} & \cancel{ABCD} & \cancel{ABCDE} & \cancel{ABCDEF} & \cancel{ABCDEFG} \\
+\cancel{B} & \cancel{AC} & \cancel{ABD} & \cancel{ABCE} & \cancel{ABCDF} & \cancel{ABCDEG} & \\
+\cancel{C} & \cancel{AD} & \cancel{ABE} & \cancel{ABCF} & \cancel{ABCDG} & \cancel{ABCDFG} & \\
+\cancel{D} & \cancel{AE} & \colorbox{green}{ABF} & \cancel{ABCG} & \cancel{ABCEF} & \cancel{ABCEFG} & \\
+\cancel{E} & \cancel{AF} & \cancel{ABG} & \cancel{ABDE} & \cancel{ABCEG} & \cancel{ABDEFG} & \\
+\cancel{F} & \cancel{AG} & \cancel{ACD} & \cancel{ABDF} & \cancel{ABCFG} & \cancel{ACDEFG} & \\
+\cancel{G} & \cancel{BC} & \cancel{ACE} & \cancel{ABDG} & \cancel{ABDEF} & \cancel{BCDEFG} & \\
+  & \cancel{BD} & \cancel{ACF} & \cancel{ABEF} & \cancel{ABDEG} & & \\
+  & \cancel{BE} & \cancel{ACG} & \cancel{ABEG} & \cancel{ABDFG} & & \\
+  & \cancel{BF} & \cancel{ADE} & \cancel{ABFG} & \cancel{ABEFG} & & \\
+  & \cancel{BG} & ADF & \cancel{ACDE} & ACDEF & & \\
+  & \cancel{CD} & \cancel{ADG} & ACDF & \cancel{ACDEG} & & \\
+  & \cancel{CE} & \cancel{AEF} & \cancel{ACDG} & \cancel{ACDFG} & & \\
+  & \cancel{CF} & \cancel{AEG} & \cancel{ACEF} & \cancel{ACEFG} & & \\
+  & \cancel{CG} & \cancel{AFG} & \cancel{ACEG} & \cancel{ADEFG} & & \\
+  & \cancel{DE} & \cancel{BCD} & \cancel{ACFG} & BCDEF & & \\
+  & DF & \cancel{BCE} & ADEF & \cancel{BCDEG} & & \\
+  & \cancel{DG} & \cancel{BCF} & \cancel{ADEG} & \cancel{BCDFG} & & \\
+  & \cancel{EF} & \cancel{BCG} & \cancel{ADFG} & \cancel{BCEFG} & & \\
+  & \cancel{EG} & \cancel{BDE} & \cancel{AEFG} & \cancel{BDEFG} & & \\
+  & \colorbox{green}{FG} & BDF & \cancel{BCDE} & \cancel{CDEFG} & & \\
+  &    & \cancel{BDG} & BCDF & & & \\
+  &    & \cancel{BEF} & \cancel{BCDG} & & & \\
+  &    & \cancel{BEG} & \cancel{BCEF} & & & \\
+  &    & \cancel{BFG} & \cancel{BCEG} & & & \\
+  &    & \cancel{CDE} & \cancel{BCFG} & & & \\
+  &    & CDF & BDEF & & & \\
+  &    & \cancel{CDG} & \cancel{BDEG} & & & \\
+  &    & \cancel{CEF} & \cancel{BDFG} & & & \\
+  &    & \cancel{CEG} & \cancel{BEFG} & & & \\
+  &    & \cancel{CFG} & CDEF & & & \\
+  &    & DEF & \cancel{CDEG} & & & \\
+  &    & \cancel{DEG} & \cancel{CDFG} & & & \\
+  &    & \cancel{DFG} & \cancel{CEFG} & & & \\
+  &    & \cancel{EFG} & \cancel{DEFG} & & & \\
+\end{tabular}
+
+With that, we are down to only 12 sets to check. Note that all remaining sets are supersets of $\{ D, F \}$. If we feel lucky, we can try to test $\{ D, F \}$ and see if it is a key.
+
+Let's compute the closure of $\{ D, F \}$:\\
+$\{ D, F \}^+ = \{ D, F \}\, \cup\, \{ E \}\, (\text{after using } D \rightarrow E)\, \cup\, \\
+\{ A, C, G \}\, (\text{after using } DEF \rightarrow ACG)\, \cup\, \{ B, D \}\, (\text{after using } G \rightarrow BD) = \{ A, B, C, D, E, F, G \}$. So, $\{ D, F \}$ is a superkey. Since none of the proper subsets of $\{ D, F \}$ remains uncrossed in our list, it is a key. Since we found a key, let's mark it and cross out all of its superkeys:
+
+\begin{tabular}{ccccccc}
+\cancel{A} & \cancel{AB} & \cancel{ABC} & \cancel{ABCD} & \cancel{ABCDE} & \cancel{ABCDEF} & \cancel{ABCDEFG} \\
+\cancel{B} & \cancel{AC} & \cancel{ABD} & \cancel{ABCE} & \cancel{ABCDF} & \cancel{ABCDEG} & \\
+\cancel{C} & \cancel{AD} & \cancel{ABE} & \cancel{ABCF} & \cancel{ABCDG} & \cancel{ABCDFG} & \\
+\cancel{D} & \cancel{AE} & \colorbox{green}{ABF} & \cancel{ABCG} & \cancel{ABCEF} & \cancel{ABCEFG} & \\
+\cancel{E} & \cancel{AF} & \cancel{ABG} & \cancel{ABDE} & \cancel{ABCEG} & \cancel{ABDEFG} & \\
+\cancel{F} & \cancel{AG} & \cancel{ACD} & \cancel{ABDF} & \cancel{ABCFG} & \cancel{ACDEFG} & \\
+\cancel{G} & \cancel{BC} & \cancel{ACE} & \cancel{ABDG} & \cancel{ABDEF} & \cancel{BCDEFG} & \\
+  & \cancel{BD} & \cancel{ACF} & \cancel{ABEF} & \cancel{ABDEG} & & \\
+  & \cancel{BE} & \cancel{ACG} & \cancel{ABEG} & \cancel{ABDFG} & & \\
+  & \cancel{BF} & \cancel{ADE} & \cancel{ABFG} & \cancel{ABEFG} & & \\
+  & \cancel{BG} & \cancel{ADF} & \cancel{ACDE} & \cancel{ACDEF} & & \\
+  & \cancel{CD} & \cancel{ADG} & \cancel{ACDF} & \cancel{ACDEG} & & \\
+  & \cancel{CE} & \cancel{AEF} & \cancel{ACDG} & \cancel{ACDFG} & & \\
+  & \cancel{CF} & \cancel{AEG} & \cancel{ACEF} & \cancel{ACEFG} & & \\
+  & \cancel{CG} & \cancel{AFG} & \cancel{ACEG} & \cancel{ADEFG} & & \\
+  & \cancel{DE} & \cancel{BCD} & \cancel{ACFG} & \cancel{BCDEF} & & \\
+  & \colorbox{green}{DF} & \cancel{BCE} & \cancel{ADEF} & \cancel{BCDEG} & & \\
+  & \cancel{DG} & \cancel{BCF} & \cancel{ADEG} & \cancel{BCDFG} & & \\
+  & \cancel{EF} & \cancel{BCG} & \cancel{ADFG} & \cancel{BCEFG} & & \\
+  & \cancel{EG} & \cancel{BDE} & \cancel{AEFG} & \cancel{BDEFG} & & \\
+  & \colorbox{green}{FG} & \cancel{BDF} & \cancel{BCDE} & \cancel{CDEFG} & & \\
+  &    & \cancel{BDG} & \cancel{BCDF} & & & \\
+  &    & \cancel{BEF} & \cancel{BCDG} & & & \\
+  &    & \cancel{BEG} & \cancel{BCEF} & & & \\
+  &    & \cancel{BFG} & \cancel{BCEG} & & & \\
+  &    & \cancel{CDE} & \cancel{BCFG} & & & \\
+  &    & \cancel{CDF} & \cancel{BDEF} & & & \\
+  &    & \cancel{CDG} & \cancel{BDEG} & & & \\
+  &    & \cancel{CEF} & \cancel{BDFG} & & & \\
+  &    & \cancel{CEG} & \cancel{BEFG} & & & \\
+  &    & \cancel{CFG} & \cancel{CDEF} & & & \\
+  &    & \cancel{DEF} & \cancel{CDEG} & & & \\
+  &    & \cancel{DEG} & \cancel{CDFG} & & & \\
+  &    & \cancel{DFG} & \cancel{CEFG} & & & \\
+  &    & \cancel{EFG} & \cancel{DEFG} & & & \\
+\end{tabular}
+
+There are no subsets of arguments that are not keys and that remain uncrossed in our list. It means that we found all keys of $R1$.
+
+\setlength{\fboxrule}{3pt}
+\setlength{\fboxsep}{10pt}
+\fbox{\parbox{0.5\textwidth}{Answer: Keys of $R1$ are $DF$, $FG$, and $ABF$.}}
+
+\end{enumerate}
+
+\end{document}

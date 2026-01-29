@@ -1,0 +1,160 @@
+\documentclass[11pt]{article}
+\usepackage{enumerate}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{upquote,textcomp}
+
+\setlength{\parindent}{0cm}
+
+\setlength{\parskip}{0.3cm plus4mm minus3mm}
+
+\oddsidemargin = 0.2in
+\textwidth = 6.5 in
+\textheight = 9.8 in
+\headsep = -1in
+
+\lstset{frame=tb,
+  language=,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  keepspaces=true,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{black},
+  keywordstyle=\color{black},
+  commentstyle=\color{black},
+  stringstyle=\color{black},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\title{Database Systems, CSCI 4380-01 \\
+Homework \# 1 Practice Problem for Question 1 Version 1.03}
+\date{}
+\begin{document}
+\maketitle
+
+\vspace*{-0.7in}
+
+{\bf Question 1 [48 points].} Write the following queries using
+relational algebra. You may use any valid relational algebra
+expression, break into multiple steps as needed. However, please make
+sure that your answers are well-formatted and are easily
+readable. Also, pay attention to the attributes required in the
+output!
+
+
+\begin{enumerate}  [(a)]
+\item
+  Find all passengers who traveled from one timezone to another in January 2026 (the flight must have departed and arrived in January 2026). Output the first and last name of each passenger, their actual flight departure and arrival, their departure and arrival airport code, name, city, and the timezone.
+  
+\end{enumerate}
+
+{\bf Solution using the standard notation.}
+
+\begin{enumerate}  [(a)]
+\item -- Rename attributes to enable Cartesian product/theta join\\
+$\rho_{Airports1(Code1, Name1, City1, Latitude1, Longitude1, Timezone1)}(Airports)$\\
+\\
+-- Rename attributes to enable Cartesian product/theta join\\
+$\rho_{Airports2(Code2, Name2, City2, Latitude2, Longitude2, Timezone2)}(Airports)$\\
+\\
+-- Pairs of airports in different timezones. Note that the condition is $Code1 > Code2$ (i.e., using $>$, not using $<>$) in order to avoid having pairs where the difference is only the order of the airports in the pair. The decision to use $>$ instead of $<$ is arbitrary. $<$ would have worked equally well.\\
+$R1 = Airports1 \,\bowtie_{\,Code1\, >\, Code2\, and\, Timezone1\, <>\, Timezone2\,}\, Airports2$\\
+\\
+-- All flights that departed and arrived in January 2026\\
+$C1 = \,ActualDeparture::date\, >=\, date\, '01/01/2026'\, and\, \\
+ActualDeparture::date\, <=\, date\, '01/31/2026'\, and\, \\
+ActualArrival::date\, >=\, date\, '01/01/2026'\, and\, \\
+ActualArrival::date\, <=\, date\, '01/31/2026'\,$\\
+$R2 = \sigma_{C1}(Flights)$\\
+\\
+-- Passengers of the flights that departed and arrived in January 2026 and where the departure and arrival airport codes correspond to airports from different timezones. Note that we need to consider both flights from \verb*|Code1| to \verb*|Code2| and from \verb*|Code2| to \verb*|Code1|.\\
+$C2 = DepartureAirportCode\, =\, Code1\, and\, ArrivalAirportCode\, =\, Code2$\\
+$R3 = Passengers \,\bowtie\, Tickets \,\bowtie\, TicketFlights\, \bowtie R2\, \bowtie_{C2}\, R1$\\
+$C3 = DepartureAirportCode\, =\, Code2\, and\, ArrivalAirportCode\, =\, Code1$\\
+$R4 = Passengers\, \bowtie\, Tickets\, \bowtie\, TicketFlights\, \bowtie\, R2\, \bowtie_{C3}\, R1$\\
+
+\newpage
+
+-- While attributes are sets, so the order doesn't matter, here we want to ensure that departure airport info (code, name, city, timezone) is listed before the arrival airport info to avoid any mixing between the departure and the arrival airports.\\
+$A1 = FirstName,\, LastName,\, ActualDeparture,\, ActualArrival,\, DepartureAirportCode,\, \\
+Name1,\, City1,\, Timezone1,\, ArrivalAirportCode,\, Name2,\, City2,\, Timezone2$\\
+$R5 = \pi_{A1}(R3)$\\
+$A2 = FirstName,\, LastName,\, ActualDeparture,\, ActualArrival,\, DepartureAirportCode,\, \\
+Name2,\, City2,\, Timezone2,\, ArrivalAirportCode,\, Name1,\, City1,\, Timezone1$\\
+$R6 = \pi_{A2}(R4)$\\
+\\
+-- All requested data for all passengers who traveled from one timezone to another in January 2026\\
+$Result = R6 \,\cup\, R7$
+\end{enumerate}
+
+{\bf Solution using the text notation.}
+
+\begin{enumerate}  [(a)]
+\item -- Rename attributes to enable Cartesian product/theta join\\
+$Airports1(Code1, Name1, City1, Latitude1, Longitude1, Timezone1) = Airports$\\
+\\
+-- Rename attributes to enable Cartesian product/theta join\\
+$Airports2(Code2, Name2, City2, Latitude2, Longitude2, Timezone2) = Airports$\\
+\\
+-- Pairs of airports in different timezones. Note that the condition is $Code1 > Code2$ (i.e., using $>$, not using $<>$) in order to avoid having pairs where the difference is only the order of the airports in the pair. The decision to use $>$ instead of $<$ is arbitrary. $<$ would have worked equally well.\\
+$R1 = Airports1\, join\_\{Code1\, >\, Code2\, and\, Timezone1\, <>\, Timezone2\}\, Airports2$\\
+\\
+-- All flights that departed and arrived in January 2026\\
+$C1 = \,ActualDeparture::date\, >=\, date\, '01/01/2026'\, and\, \\
+ActualDeparture::date\, <=\, date\, '01/31/2026'\, and\, \\
+ActualArrival::date\, >=\, date\, '01/01/2026'\, and\, \\
+ActualArrival::date\, <=\, date\, '01/31/2026'\,$\\
+$R2 = select\_\{C1\}\, (Flights)$\\
+\\
+-- Passengers of the flights that departed and arrived in January 2026 and where the departure and arrival airport codes correspond to airports from different timezones. Note that we need to consider both flights from \verb*|Code1| to \verb*|Code2| and from \verb*|Code2| to \verb*|Code1|.\\
+$C2 = DepartureAirportCode\, =\, Code1\, and\, ArrivalAirportCode\, =\, Code2$\\
+$R3 = Passengers\, *\, Tickets\, *\, TicketFlights\, *\, R2\, join\_\{C2\}\, R1$\\
+$C3 = DepartureAirportCode\, =\, Code2\, and\, ArrivalAirportCode\, =\, Code1$\\
+$R4 = Passengers\, *\, Tickets\, *\, TicketFlights\, *\, R2\, join\_\{C3\}\, R1$\\
+
+\newpage
+
+-- While attributes are sets, so the order doesn't matter, here we want to ensure that departure airport info (code, name, city, timezone) is listed before the arrival airport info to avoid any mixing between the departure and the arrival airports.\\
+$A1 = FirstName,\, LastName,\, ActualDeparture,\, ActualArrival,\, DepartureAirportCode,\, \\
+Name1,\, City1,\, Timezone1,\, ArrivalAirportCode,\, Name2,\, City2,\, Timezone2$\\
+$R5 = project\_\{A1\}\, (R3)$\\
+$A2 = FirstName,\, LastName,\, ActualDeparture,\, ActualArrival,\, DepartureAirportCode,\, \\
+Name2,\, City2,\, Timezone2,\, ArrivalAirportCode,\, Name1,\, City1,\, Timezone1$\\
+$R6 = project\_\{A2\}\, (R4)$\\
+\\
+-- All requested data for all passengers who traveled from one timezone to another in January 2026\\
+$Result = R5 \,\cup\, R6$
+\end{enumerate}
+
+\setlength{\fboxrule}{3pt}
+\setlength{\fboxsep}{10pt}
+\fbox{\parbox{1.0\textwidth}{Answer:\\
+$\rho_{Airports1(Code1, Name1, City1, Latitude1, Longitude1, Timezone1)}(Airports)$\\
+$\rho_{Airports2(Code2, Name2, City2, Latitude2, Longitude2, Timezone2)}(Airports)$\\
+$R1 = Airports1 \,\bowtie_{\,Code1\, >\, Code2\, and\, Timezone1\, <>\, Timezone2\,}\, Airports2$\\
+$C1 = \,ActualDeparture::date\, >=\, date\, '01/01/2026'\, and\, \\
+ActualDeparture::date\, <=\, date\, '01/31/2026'\, and\, \\
+ActualArrival::date\, >=\, date\, '01/01/2026'\, and\, \\
+ActualArrival::date\, <=\, date\, '01/31/2026'\,$\\
+$R2 = \sigma_{C1}(Flights)$\\
+$C2 = DepartureAirportCode\, =\, Code1\, and\, ArrivalAirportCode\, =\, Code2$\\
+$R3 = Passengers \,\bowtie\, Tickets \,\bowtie\, TicketFlights\, \bowtie R2\, \bowtie_{C2}\, R1$\\
+$C3 = DepartureAirportCode\, =\, Code2\, and\, ArrivalAirportCode\, =\, Code1$\\
+$R4 = Passengers\, \bowtie\, Tickets\, \bowtie\, TicketFlights\, \bowtie\, R2\, \bowtie_{C3}\, R1$\\
+$A1 = FirstName,\, LastName,\, ActualDeparture,\, ActualArrival,\, DepartureAirportCode,\, \\
+Name1,\, City1,\, Timezone1,\, ArrivalAirportCode,\, Name2,\, City2,\, Timezone2$\\
+$R5 = \pi_{A1}(R3)$\\
+$A2 = FirstName,\, LastName,\, ActualDeparture,\, ActualArrival,\, DepartureAirportCode,\, \\
+Name2,\, City2,\, Timezone2,\, ArrivalAirportCode,\, Name1,\, City1,\, Timezone1$\\
+$R6 = \pi_{A2}(R4)$\\
+\\
+$Result = R6 \,\cup\, R7$
+}}
+
+\end{document}
+
